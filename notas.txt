@@ -1,0 +1,7 @@
+Wei
+Guei (factor 9)
+Ether (factor 18)
+
+1 Wei = 0,000000001 Guei = 0,000000000000000001 Ether
+1000000000 Wei = 1 Guei = 0,000000001 Ether
+1000000000000000000 Wei = 1000000000 Guei = 1 Ether
