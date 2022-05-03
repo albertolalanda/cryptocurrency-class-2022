@@ -1,1 +1,56 @@
 Homework 1 - https://docs.google.com/forms/d/e/1FAIpQLScQ0Vk6lclw_BXNDHEoS6TKTj3r5tLaAWCwokeZxlshOzyitQ/viewscore?viewscore=AE0zAgD1X9dayQ45T6PL36uZksir0g3gzKZB31QZIZbdyE-JF-KqU-0H3iRioq5cdYll_tQ
+
+Lecture 2 presentation questions:
+-Why is Alice sending herself 1 coin?
+.Alice is sending herself one coin because that is the coins left on her balance. Alice has 8 coins and the entry is deleted since she sends 4 to Fred
+and 2.8 to grace, and since Alice record of 8 coins is deleted, a new record is created with the remainder 1 coin that she is alowed to spend.
+-Where is the transaction fee for the miner?
+.The transactions fee to the miner is the 0.2 BTC that was left out of the table with the new unspent transactions.
+
+-Is a cryptocurrency truly censorship-resistant if we rely on “soft-forks” to add or remove consensus rules?
+
+-Find out which properties have been broken for SHA1
+
+Why does the input need to have a copy of the public key if the hash is already stored in the UTXO?
+Why does the UTXO store a hash of the public key and not just the public key?
+Is it possible to reveal the entire spending condition script in the input of a transaction as well?
+
+Homework 2 - https://docs.google.com/forms/d/e/1FAIpQLSflkUZtukkKokjsX-0Pd7GRqHMNMNJt-DCUy2r17VVtHi3u8Q/viewscore?viewscore=AE0zAgDKfWbZ1aWIn2uUBY-xP-FYVnGY1wta9X7Imbq4d69YHPKUGTG4T76mmCCz8AEoETc
+
+Tutorial 2 questions: 
+
+Why can we not fetch the current block hash on solidity code? 
+- Because the hash of the current block is not definitive until the block is mined, since the output of the transactions is part of the hash calculation, so the transaction has no access to the hash of the block being mined.
+What is the difference between assert and require?
+- The difference is that on the precondition failing require will refund the unused gas to the message sender while assert() will use all remaining gas. Both will revert all execution done so far until that point.
+What is the difference between byte, byte1 and bytes?
+- bytes1 declares a fixed array of one byte. It can go from bytes1 up to bytes32. bytes declares a dynamically-size byte arrays, it is shorthand to bytes[].
+What combinations of key words lets us track the total gas used within a function?
+- gasleft() gives us the remaining gas allowed by the message sender for the execution of the contract.
+What is the difference between tx.origin and msg.sender? And why is it not recommended practice to use tx.origin?
+-tx.origin specifies the Ethereum account of the user who signed the transaction
+-msg.sender specifies the address of the function’s immediate caller
+What is the difference between address.transfer and address.send? And why do both functions only forward 2,300 gas to the receiver?
+- Both send ether to the address. address.transfer if it fails throws an exception and reverts all execution done so far. address.send, returns(bool) whether the transfer was successful or not.
+
+ERC20
+Where can we find the balance of each party for a given token?
+– erc20TokenAddress.balanceOf[msg.sender]
+What does it mean to transfer an ERC20 token to another party? And roughly how do we do that?
+– It means that the balance for the ERC20 token is transfered from one address to another. 
+erc20TokenAddress.transferFrom(address sender, address recipient, uint256 amount) returns(bool); 
+erc20TokenAddress.transfer(address recipient, uint256 amount) returns(bool);
+What are the necessary steps to deploy your own ERC20 token?
+– Deploy a contract with an implementation of an ERC20-compliant interface, for example the OpenZeppelin or the ConsenSys implementations.
+
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {
+        // Mint 100 tokens to msg.sender
+        // Similar to how
+        // 1 dollar = 100 cents
+        // 1 token = 1 * (10 ** decimals)
+        _mint(msg.sender, 100 * 10**uint(decimals()));
+    }
+}
