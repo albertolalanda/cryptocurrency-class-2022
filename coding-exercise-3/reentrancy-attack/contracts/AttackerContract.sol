@@ -3,6 +3,7 @@ pragma solidity >=0.7.0 <0.9.0;
 
 interface VictimContractInterface {
     function withdraw() external payable;
+    function withdrawNonVulnerable() external payable; 
 }
 
 contract AttackerContract {
@@ -19,7 +20,7 @@ contract AttackerContract {
         }
     }
 
-    function() external payable {
+    fallback() external payable {
         // attack if still funds to withdrawl
         attack();
     }
