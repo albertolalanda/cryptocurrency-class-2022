@@ -54,3 +54,20 @@ contract MyToken is ERC20 {
         _mint(msg.sender, 100 * 10**uint(decimals()));
     }
 }
+
+Lecture 3 presentation questions:
+
+Difference between CALL, CALLCODE, DELEGATECALL,
+Smart contract storage updated when the function is called?
+Message values (i.e., msg.sender) are updated or carried over?
+- Storage:
+	CALL - A CALL B. context/storage of B is used
+	CALLCODE - A CALLCODE B. context of A is used
+	DELEGATECALL - A DELEGATECALL B. context of A is used
+- Message values (msg.sender and msg.value)
+	CALL - A CALL B. msg.sender of B is used
+	CALLCODE - A CALLCODE B. msg.sender of A is used
+	DELEGATECALL - A DELEGATECALL B. msg.sender of A is used
+DELEGATECALL was a new opcode that was a bug fix for CALLCODE which did not preserve msg.sender and msg.value.
+If Alice invokes Bob who does DELEGATECALL to Charlie, the msg.sender in the DELEGATECALL is Alice (whereas if CALLCODE was used the msg.sender would be Bob).
+STATICCALL - Contract A calls a function on Contract B. The execution allows for read operations, but the state of Contract B cannot be changed.
