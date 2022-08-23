@@ -24,3 +24,38 @@ function isContract(address addr) public view returns (bool) {
 	return size > 0;
 }
 
+proxy-factory pattern - Deploy logic contract and then deploy cheap proxys that delegate call the logic with their own context
+EIP-1822: Universal Upgradeable Proxy Standard (UUPS) - Proxy contract delegates call to logic contract and updates proxy contract storage. Logic contract can be updated and proxy contract will call the new address.
+
+JSON with the NFT info - If you’d like to put all item information on-chain, you can extend ERC721 to do so (though it will be rather costly) by providing a Base64 Data URI with the JSON schema encoded. You could also leverage IPFS to store the URI information, but these techniques are out of the scope of this overview guide
+
+For ERC777 and ERC1155 etc. In order for our contract to receive ERC1155 tokens we can inherit from the convenience contract ERC1155Holder which handles the registering for us. Though we need to remember to implement functionality to allow tokens to be transferred out of our contract:
+
+Reduce code size tips: -----------------------------------------
+
+Function modifier instead of having condition, 
+call internal function https://www.youtube.com/watch?v=XDqD3X8DCiw
+
+Reduce gas cost tips: -----------------------------------------
+
+function parameter CALLDATA > MEMORY
+
+If we access state variable multiple times, load state into memory and update into state at the end.
+
+
+
+Security flaws SmartContracts: -----------------------------------------
+
+Re-use of the same msg.value, through a loop or some kind of batching/multicall function should not be done.
+
+Methods of upgradable contracts: -----------------------------------------
+https://blog.trailofbits.com/2018/09/05/contract-upgrade-anti-patterns/
+Data separation - Contract with the logic calls -> contract with the data.
+					Contract with the logic is upgradable.
+Delegatecall-based proxies - Proxy contract holds data delegate calls -> logic contract 
+					Contract with the logic is upgradable.
+					If the order of data on the logic contract is not the same on proxy/data contract, a delegate call, can currupt the data on the proxy contract.
+		Options to separate data and logic:
+			Inherited storage, which uses Solidity inheritance to ensure that the caller and the callee have the same memory layout.
+			Eternal storage, which is the key-value storage version of the logic separation that we saw above.
+			Unstructured storage, which is the only strategy that does not suffer from potential memory corruption due to an incorrect memory layout. It relies on inline assembly code and custom memory management on storage variables.
